@@ -47,14 +47,8 @@ jobs:
           mv ./art /usr/local/bin/art
       - name: Fetch BuildTime Secrets
         run: |
-          art configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
-          art app envvars get -f .art/argonaut-dev3-wahal-battleships-test.yaml \
-            --set appName="battleships-test" \
-            --set argonaut.env="dev3" \
-            --set argonaut.region="us-east-2" \
-            --set argonaut.cluster="wahal" \
-            --set argonaut.serviceType="stateless" \
-            --set argonaut.imageRegistry="ecr" \
+          art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
+          art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live app envvars get -f .art/argonaut-dev3-wahal-battleships-test.yaml \
             --type buildtime \
             --format dotenv > art-build-secrets.env
       - name: build-docker
@@ -70,7 +64,7 @@ jobs:
 
       - name: Set AWS Credentials via art
         run: |
-          art configure generate-aws-credentials >> credentials.json
+          art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live configure generate-aws-credentials >> credentials.json
           echo "AWS_ACCESS_KEY_ID=$(cat credentials.json | jq --raw-output '.accessKeyId')" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=$(cat credentials.json | jq --raw-output '.secretAccessKey')" >> $GITHUB_ENV
           echo "AWS_SESSION_TOKEN=$(cat credentials.json | jq --raw-output '.sessionToken')" >> $GITHUB_ENV
@@ -116,15 +110,6 @@ jobs:
           mv ./art /usr/local/bin/art
       - name: Configure art
         run: |
-          art configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
-          art app deploy -f .art/argonaut-dev3-wahal-battleships-test.yaml \
-            --set image="170982004044.dkr.ecr.us-east-2.amazonaws.com/argonaut/battleships-test" \
-            --set 'labels.argonaut\.dev/git-provider'='github' \
-            --set argonaut.git-provider='github' \
-            --set imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}" \
-            --set appName="battleships-test" \
-            --set argonaut.env="dev3" \
-            --set argonaut.region="us-east-2" \
-            --set argonaut.cluster="wahal" \
-            --set argonaut.serviceType="stateless" \
-            --set argonaut.imageRegistry="ecr" 
+          art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
+          art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live app deploy -f .art/argonaut-dev3-wahal-battleships-test.yaml \
+            --set imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}" 
