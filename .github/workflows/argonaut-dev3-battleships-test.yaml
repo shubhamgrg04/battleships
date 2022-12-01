@@ -49,6 +49,12 @@ jobs:
         run: |
           art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
           art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live app envvars get -f .art/argonaut-dev3-wahal-battleships-test.yaml \
+            --set appName="battleships-test" \
+            --set argonaut.env="dev3" \
+            --set argonaut.region="us-east-2" \
+            --set argonaut.cluster="wahal" \
+            --set argonaut.serviceType="stateless" \
+            --set argonaut.imageRegistry="ecr" \
             --type buildtime \
             --format dotenv > art-build-secrets.env
       - name: build-docker
@@ -112,4 +118,10 @@ jobs:
         run: |
           art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
           art --frontegg-server=argonaut-pp.frontegg.com --midgard-server=midgard.pp.argonaut.live app deploy -f .art/argonaut-dev3-wahal-battleships-test.yaml \
-            --set imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}" 
+            --set imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}" \
+            --set appName="battleships-test" \
+            --set argonaut.env="dev3" \
+            --set argonaut.region="us-east-2" \
+            --set argonaut.cluster="wahal" \
+            --set argonaut.serviceType="stateless" \
+            --set argonaut.imageRegistry="ecr" 
