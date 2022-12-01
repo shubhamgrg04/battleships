@@ -12,6 +12,7 @@ argonaut:
   imageRegistry: ecr # corresponding to the image that is to be deployed
   serviceType: "stateless" # One of {stateful, stateless, managed}
   repoName: battleships
+  git-provider: github
 persistentStorage:
   []
 
@@ -34,7 +35,9 @@ podAnnotations:
   {}
   # iam.amazonaws.com/role: myapp-cluster
 # additionals labels
-labels: {}
+labels: {
+  argonaut.dev/git-provider: github
+}
 
 # Allows you to load environment variables from kubernetes secret or config map
 envFrom: []
@@ -172,4 +175,4 @@ extraEnvs: []
 #  - name: MY_ENVIRONMENT_VAR
 #    value: the_value_goes_here
 
-# Generated at 2022-12-01 18:03:41.431145 +0000 UTC
+# Generated at 2022-12-01 18:17:52.694358 +0000 UTC
